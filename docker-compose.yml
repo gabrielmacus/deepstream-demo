@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  deepstream:
+    build: 
+      context: .
+      #shm_size: '12gb'
+    #shm_size: '16gb'
+    container_name: deepstream_demo
+    restart: unless-stopped
+    privileged: true
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./src:/home/deepstream_demo/app
+    environment:
+      - DISPLAY=$DISPLAY
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    network_mode: "host"
